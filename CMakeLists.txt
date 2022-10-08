@@ -20,6 +20,10 @@ include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 
 include_directories(${CMAKE_SOURCE_DIR}/Include)
+# Third party includes
+include_directories(${CMAKE_SOURCE_DIR}/Include/ThirdParty/constexpr-random/include)
+include_directories(${CMAKE_SOURCE_DIR}/Include/ThirdParty/Sprout)
+
 FILE(GLOB_RECURSE SourceFiles ${CMAKE_SOURCE_DIR}/Source/*.cpp)
 FILE(GLOB_RECURSE TestSourceFiles ${CMAKE_SOURCE_DIR}/Test/*.cpp)
 
