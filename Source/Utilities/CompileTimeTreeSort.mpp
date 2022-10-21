@@ -1,11 +1,8 @@
-#ifndef WARP__BOOTSTRAP__COMPILER__UTILITIES__INCLUDE__GUARD__COMPILE_TIME_TREE_SORT__HPP
-#define WARP__BOOTSTRAP__COMPILER__UTILITIES__INCLUDE__GUARD__COMPILE_TIME_TREE_SORT__HPP
+export module Warp.Utilities:CompileTimeTreeSort;
 
-#include <Warp/Utilities/Sequence.hpp>
-#include <Warp/Utilities/ConstantBinaryTree.hpp>
-#include <Warp/Utilities/Templates.hpp>
+import :ConstantBinaryTree;
 
-namespace Warp::Utilities
+export namespace Warp::Utilities
 {
 	template<
 	        auto CompareParameterConstant, 
@@ -92,6 +89,4 @@ namespace Warp::Utilities
 	    return TreeType::flatten();
 	}
 }
-
-#endif // WARP__BOOTSTRAP__COMPILER__UTILITIES__INCLUDE__GUARD__COMPILE_TIME_TREE_SORT__HPP
 

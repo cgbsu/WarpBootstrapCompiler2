@@ -1,17 +1,17 @@
-#ifndef WARP__BOOTSTRAP__COMPILER__UTILITIES__INCLUDE__GUARD__TEMPLATES__HPP
-#define WARP__BOOTSTRAP__COMPILER__UTILITIES__INCLUDE__GUARD__TEMPLATES__HPP
-#include <Warp/Common.hpp>
+export module Warp.Utilities:Templates;
 
-namespace Warp::Utilities
+import Warp.Common;
+
+export namespace Warp::Utilities
 {
 	template<typename ToCleanParameterType>
 	using CleanType = std::remove_reference_t<std::decay_t<ToCleanParameterType>>;
 
 	template<typename CanidateParameterType>
-	constinit static const auto isNullOptType = std::is_same_v<CleanType<CanidateParameterType>, std::nullopt_t>;
-	
+	constinit const bool isNullOptType = std::is_same_v<CleanType<CanidateParameterType>, std::nullopt_t>;
+
 	template<auto CanidateParameterConstant>
-	constinit static const auto constantIsNullOptType 
+	constinit const auto constantIsNullOptType 
 			= std::is_same_v<CleanType<decltype(CanidateParameterConstant)>, std::nullopt_t>;
 	
 	template<typename CanidateParameterType>
@@ -78,12 +78,12 @@ namespace Warp::Utilities
 		};
 
 	template<size_t ToIgnoreParmeterConstant, size_t... IndexParameterConstants>
-	constexpr static const auto takeAfterImplentation(auto from, std::index_sequence<IndexParameterConstants...>) {
+	constexpr const auto takeAfterImplentation(auto from, std::index_sequence<IndexParameterConstants...>) {
 		return std::tuple{std::get<IndexParameterConstants + ToIgnoreParmeterConstant>(from)...};
 	}
 
 	template<size_t ToIgnoreParmeterConstant>
-	constexpr static const auto takeAfter(auto from) {
+	constexpr const auto takeAfter(auto from) {
 		return takeImplentation(from, (std::tuple_size_v<decltype(from)> - ToIgnoreParmeterConstant));
 	}
 
@@ -118,11 +118,9 @@ namespace Warp::Utilities
 	};
 	
 	template<typename ParameterType>
-	constexpr static const auto isOptional = IsOptionalHelper<ParameterType>::value;
+	constexpr const auto isOptional = IsOptionalHelper<ParameterType>::value;
 	
 	template<typename ParameterType>
 	concept OptionalConcept = isOptional<ParameterType>;
 }
-
-#endif // WARP__BOOTSTRAP__COMPILER__UTILITIES__INCLUDE__GUARD__TEMPLATES__HPP
 

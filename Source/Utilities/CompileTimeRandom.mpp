@@ -1,15 +1,15 @@
-#ifndef WARP__BOOTSTRAP__COMPILER__UTILITIES__INCLUDE__GUARD__COMPILE_TIME_RANDOM__HPP
-#define WARP__BOOTSTRAP__COMPILER__UTILITIES__INCLUDE__GUARD__COMPILE_TIME_RANDOM__HPP
-
-#include <Warp/Common.hpp>
-
-#include <crand/distributions/uniform_int_distribution.hpp>
-#include <crand/distributions/distribution_limits.hpp>
-#include <crand/engines/xorshift_engine.hpp>
-
+module;
 #include <crc_cpp.h>
+export module Warp.Utilities:CompileTimeRandom;
 
-namespace Warp::Utilities
+import Warp.Common;
+
+import <crand/distributions/uniform_int_distribution.hpp>;
+import <crand/distributions/distribution_limits.hpp>;
+import <crand/engines/xorshift_engine.hpp>;
+
+
+export namespace Warp::Utilities
 {
 
 	template<size_t... IndexParameterConstants>
@@ -96,6 +96,4 @@ namespace Warp::Utilities
 			>();
 	}
 }
-
-#endif // WARP__BOOTSTRAP__COMPILER__UTILITIES__INCLUDE__GUARD__COMPILE_TIME_RANDOM__HPP
 

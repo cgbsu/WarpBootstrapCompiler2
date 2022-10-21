@@ -1,10 +1,8 @@
-#ifndef WARP__BOOTSTRAP__COMPILER__UTILITIES__INCLUDE__GUARD__SEQUENCE__HPP
-#define WARP__BOOTSTRAP__COMPILER__UTILITIES__INCLUDE__GUARD__SEQUENCE__HPP
+export module Warp.Utilities:Sequence;
 
-#include <Warp/Common.hpp>
-#include <Warp/Utilities/Templates.hpp>
+import :Templates;
 
-namespace Warp::Utilities
+export namespace Warp::Utilities
 {
 	template<auto... SequenceParameterConstants>
 	struct RawSequence {};
@@ -94,7 +92,7 @@ namespace Warp::Utilities
 				return findFirst(RawSequence<SequenceParameterConstants...>());
 		}
 	};
-	
+/*	
 	template<size_t FirstParameterConstant, size_t... SequenceParmaterConstants>
 	struct SequenceTakeOneHelper
 	{
@@ -153,6 +151,10 @@ namespace Warp::Utilities
 
 	/* TODO: Could be specialized so if all the constants in ElementParameterConstants are of the *
 	* same type, an array could be constructed then the desired element simly indexed. ***********/ 
+
+
+	/*
+
 	template<
 			size_t IndexParameterConstant, 
 			auto... ElementParameterConstants, 
@@ -221,8 +223,6 @@ namespace Warp::Utilities
 				ReplacementParameterConstant
 			>(Sequence<ElementParameterConstants...>{}, Sequence<>());
 	}
-
+	*/
 }
-
-#endif // WARP__BOOTSTRAP__COMPILER__UTILITIES__INCLUDE__GUARD__SEQUENCE__HPP
 

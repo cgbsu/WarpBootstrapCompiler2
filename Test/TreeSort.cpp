@@ -1,7 +1,5 @@
-#include <Warp/Utilities/Sequence.hpp>
-#include <Warp/Utilities/CompileTimeTreeSort.hpp>
-#include <Warp/Utilities/CompileTimeRandom.hpp>
-
+import Warp.Utilities;
+/*
 #include <catch2/catch_test_macros.hpp>
 using namespace Warp::Utilities;
 
@@ -44,4 +42,5 @@ TEST_CASE(
 		//REQUIRE(toRuntimeValues(result) == expected);
 	}
 }
+*/
 
