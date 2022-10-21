@@ -1,10 +1,12 @@
+#include <Warp/Utilities/Sequence.hpp>
 #include <Warp/Utilities/CompileTimeTreeSort.hpp>
+#include <Warp/Utilities/CompileTimeRandom.hpp>
 
 #include <catch2/catch_test_macros.hpp>
 using namespace Warp::Utilities;
 
 template<auto... CompileTimeValueParameterConstants>
-constexpr auto toRuntimeValues() 
+constexpr auto toRuntimeValues(Sequence<CompileTimeValueParameterConstants...>) 
 		-> std::array<size_t, sizeof...(CompileTimeValueParameterConstants)>
 {
 	return std::array<size_t, sizeof...(CompileTimeValueParameterConstants)>{
@@ -12,17 +14,34 @@ constexpr auto toRuntimeValues()
 		};
 }
 	
+constexpr static const auto minimum = [](auto left, auto right) { return left < right; };
+
+
+//template<auto... InOrderParameterConstants, auto... JumbledParameterConstants>
+//constexpr static auto shuffleSequence(
+//		Sequence<InOrderParameterConstants...>, 
+//		Sequence<JumbledParameterConstants...>
+//	)
+//{
+//
+//}
+
 TEST_CASE(
 		"CompileTimeTreeSort sorts an unordered list of unique elements", 
 		"[compile-time-tree-sort]"
 	)
 {
-	//{
-	//	constexpr auto result = treeSort<std::min>(
-	//			std::index_sequence<14, 5, 82, 1, 10, 2, 6, 18, 17, 3, 30, 16>
-	//		);
-	//	constexpr std::array<size_t> expected{1, 2, 3, 5, 6, 10, 14, 16, 17, 18, 30, 82};
-
-	//}
+	{
+		using X = decltype(treeSortMakeTree<minimum, ConstantBinaryTreeRootType>(
+				std::index_sequence<14, 5, 82, 1, 10, 2, 6, 18, 17, 3, 30, 16>()
+			));
+		std::cout << X::toString() << "\n";
+		constexpr auto result = treeSort<minimum>(
+				std::index_sequence<14, 5, 82, 1, 10, 2, 6, 18, 17, 3, 30, 16>()
+			);
+		std::cout << decltype(result)::toString() << "\n";
+		constexpr std::array expected{1u, 2u, 3u, 5u, 6u, 10u, 14u, 16u, 17u, 18u, 30u, 82u};
+		//REQUIRE(toRuntimeValues(result) == expected);
+	}
 }
 

@@ -43,41 +43,34 @@ namespace Warp::Utilities
 	    template<auto NewRightParameterConstant>
 	    constexpr static const auto newRight = NewRightType<NewRightParameterConstant>();
 	
-	    template<auto... CurrentSequenceParameterConstants>
+	    //template<auto... CurrentSequenceParameterConstants>
 	    constexpr static const auto flatten()
 	    {
 	        if constexpr(rootIsNullOpt == false)
 	        {
 	            constexpr bool isLeaf = (leftIsNullOpt ==  true) && (rightIsNullOpt == true);
 	            if constexpr(isLeaf == true)
-	                return Sequence<CurrentSequenceParameterConstants..., root>();
+	                return Sequence<root>();
 	            else
 	            {
 	                if constexpr(leftIsNullOpt == false)
 	                {
-	                    using LeftResultType = decltype(LeftType
-	                            ::template flatten<CurrentSequenceParameterConstants...>()
-	                        );
+	                    using LeftResultType = decltype(LeftType::flatten());
 	                    if constexpr(rightIsNullOpt == false)
 	                    {
-	                        constexpr auto rightResult = RightType
-	                                ::template flatten<CurrentSequenceParameterConstants...>();
-	                        return decltype(LeftResultType
-	                                ::template merged<root>)
-	                                ::template merge(rightResult);
+	                        constexpr const auto rightResult = RightType::flatten();
+							constexpr const auto leftMerged = LeftResultType::template merged<root>;
+	                        return decltype(leftMerged)::template merge(rightResult);
 	                    }
 	                    else
-	                        return LeftResultType();
-	                }
-	                else if constexpr(rightIsNullOpt == false) {
-	                    return RightType::template flatten<root, CurrentSequenceParameterConstants...>();
+	                        return LeftResultType::template merged<root>;
 	                }
 	                else
-	                    return Sequence<CurrentSequenceParameterConstants...>();
+	                    return Sequence<root>::template merge(RightType::flatten());
 	            }
 	        }
 	        else
-	            return Sequence<CurrentSequenceParameterConstants...>();
+				return Sequence<>();
 	    }
 	    static std::string componentToString(const auto component)
 	    {

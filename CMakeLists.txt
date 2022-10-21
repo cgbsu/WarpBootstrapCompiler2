@@ -5,16 +5,16 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_STANDARD 23)
 set(MAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_BUILD_TYPE Release)
-set(CMAKE_CXX_COMPILER_LAUNCHER ccache)
+# set(CMAKE_CXX_COMPILER_LAUNCHER ccache)
 
-add_compile_options(
-		-fconstexpr-ops-limit=3355443299 
-		-fconstexpr-depth=1280
-		-fconcepts-diagnostics-depth=2 
-		-ftemplate-depth=10000
-		-frounding-math
-		-fmodules-ts
-	)
+#add_compile_options(
+#		-fconstexpr-ops-limit=3355443299 
+#		-fconstexpr-depth=1280
+#		-fconcepts-diagnostics-depth=2 
+#		-ftemplate-depth=10000
+#		-frounding-math
+#		-fmodules-ts
+#	)
 
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()

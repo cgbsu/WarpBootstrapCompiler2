@@ -1,12 +1,13 @@
-#include <Warp/Utilities/CompileTimeRandom.hpp>
+#define CATCH_CONFIG_MAIN
+#include <catch2/catch_session.hpp>
 
-using namespace Warp::Utilities;
-
-int main(int argc, char** args)
-{
-	constexpr auto nums = randomRange<0, 10, 100>();
-	for(size_t ii = 0; ii < 100; ++ii)
-		std::cout << nums[ii] << "\n";
-	return 0;
-}
+//int main( int argc, char* argv[] ) {
+//  // your setup ...
+//
+//  int result = Catch::Session().run( argc, argv );
+//
+//  // your clean-up...
+//
+//  return result;
+//}
 
