@@ -11,4 +11,5 @@ target("test")
 	add_includedirs("Include")
 	add_includedirs("Include/ThirdParty/constexpr-random/include")
 	add_packages("ctpg", "crc_cpp", "catch2")
+	set_policy("build.c++.modules", true)
 
