@@ -1,4 +1,4 @@
-export module Warp.Common;
+module;
 
 export import <iostream>;
 
@@ -30,8 +30,9 @@ export import <concepts>;
 // </iso-standard> //
 
 // Parsing //
-export import <ctpg/ctpg.hpp>;
+//export import <ctpg/ctpg.hpp>;
 
 // </third-party> //
 
+export module Warp.Common;
 

@@ -19,7 +19,7 @@ export namespace Warp::Utilities
 					SequenceParameterConstants...
 				>(additionalArguments...);
 		}
-	
+
 	    template<auto... NewSequenceParameterConstants>
 	    using MergeType = Sequence<
 	            SequenceParameterConstants..., 
@@ -92,7 +92,8 @@ export namespace Warp::Utilities
 				return findFirst(RawSequence<SequenceParameterConstants...>());
 		}
 	};
-/*	
+
+/*
 	template<size_t FirstParameterConstant, size_t... SequenceParmaterConstants>
 	struct SequenceTakeOneHelper
 	{
@@ -116,7 +117,7 @@ export namespace Warp::Utilities
 			CleanType<decltype(CurrentElementParameterConstant)>, 
 			CleanType<decltype(ElementParameterConstants)>
 		> && ...)
-	consteval static const auto parameterConstantAtIndexImplementation() noexcept
+	consteval const auto parameterConstantAtIndexImplementation() noexcept
 	{
 		const CleanType<decltype(CurrentElementParameterConstant)> elements[] = {
 			CurrentElementParameterConstant, ElementParameterConstants...
@@ -131,7 +132,7 @@ export namespace Warp::Utilities
 			auto CurrentElementParameterConstant, 
 			auto... ElementParameterConstants
 		>
-	constexpr static const auto parameterConstantAtIndexImplementation() noexcept
+	constexpr const auto parameterConstantAtIndexImplementation() noexcept
 	{
 		if constexpr(IndexParameterConstant == CurrentIndexParameterConstant)
 			return CurrentElementParameterConstant;
@@ -152,16 +153,14 @@ export namespace Warp::Utilities
 	/* TODO: Could be specialized so if all the constants in ElementParameterConstants are of the *
 	* same type, an array could be constructed then the desired element simly indexed. ***********/ 
 
-
-	/*
-
+/*
 	template<
 			size_t IndexParameterConstant, 
 			auto... ElementParameterConstants, 
 			template<auto...> typename SequenceParamaeterType
 		>
 	requires(IndexParameterConstant < sizeof...(ElementParameterConstants))
-	consteval static const auto parameterConstantAtIndex(
+	consteval const auto parameterConstantAtIndex(
 			SequenceParamaeterType<ElementParameterConstants...>
 		) noexcept
 	{
@@ -180,7 +179,7 @@ export namespace Warp::Utilities
 			auto... ElementParameterConstants, 
 			auto... PreviousElementsParameterConstants
 		>
-	constexpr static auto replaceElement(
+	constexpr auto replaceElement(
 			Sequence<CurrentElementParameterConstant, ElementParameterConstants...>, 
 			Sequence<ElementParameterConstants...>
 		)
@@ -215,7 +214,7 @@ export namespace Warp::Utilities
 			template <auto...> typename SequenceParameterTemplate, 
 			auto... ElementParameterConstants
 		>
-	constexpr static auto replaceElement(SequenceParameterTemplate<ElementParameterConstants...>)
+	constexpr auto replaceElement(SequenceParameterTemplate<ElementParameterConstants...>)
 	{
 		return replaceElement<
 				ElementToFilterOutIndexParameterConstant, 

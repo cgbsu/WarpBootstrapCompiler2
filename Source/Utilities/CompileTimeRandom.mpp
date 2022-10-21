@@ -1,99 +1,97 @@
-module;
-#include <crc_cpp.h>
 export module Warp.Utilities:CompileTimeRandom;
 
-import Warp.Common;
-
-import <crand/distributions/uniform_int_distribution.hpp>;
-import <crand/distributions/distribution_limits.hpp>;
-import <crand/engines/xorshift_engine.hpp>;
-
-
-export namespace Warp::Utilities
-{
-
-	template<size_t... IndexParameterConstants>
-	constexpr static size_t hashTimeImplementation(
-			std::index_sequence<IndexParameterConstants...>
-		)
-	{
-		crc_cpp::crc16_ccit crc;
-		(crc.update(static_cast<uint8_t>(__TIME__[IndexParameterConstants])), ...);
-		return crc.final();
-	}
-
-	constexpr static const size_t standardTimeStringLength = 9;
-
-	constexpr static size_t hashTime()
-	{
-		return hashTimeImplementation(
-				std::make_index_sequence<standardTimeStringLength>()
-			);
-	}
-	template<
-			std::integral auto MimimumParameterConstant, 
-			std::integral auto MaximumParameterConstant
-		>
-	constexpr static auto randomNumber(std::integral auto seed = hashTime())
-	{
-		using IntegralType = decltype(MimimumParameterConstant);
-		crand::xorshift64 generator(seed);
-		return crand::uniform_int_distribution(
-				crand::inclusive<IntegralType>(MimimumParameterConstant), 
-				crand::inclusive<IntegralType>(MaximumParameterConstant) // There may be a compiler error if the types mismatch
-			)(generator);
-	}
-
-	template<
-			std::integral auto MimimumParameterConstant, 
-			std::integral auto MaximumParameterConstant, 
-			std::integral auto LengthParameterConstant, 
-			std::integral auto SeedParameterConstant, 
-			std::integral auto IndexParameterConstant, 
-			typename ParameterType, 
-			std::integral auto... RandomNumberParameterConstants
-		>
-	consteval static auto randomRange()
-	{
-		using IntegralType = decltype(MimimumParameterConstant);
-		if constexpr(IndexParameterConstant < LengthParameterConstant)
-		{
-			constexpr auto next = randomNumber<
-					MimimumParameterConstant, 
-					MaximumParameterConstant
-				>(SeedParameterConstant);
-			return randomRange<
-					MimimumParameterConstant, 
-					MaximumParameterConstant, 
-					LengthParameterConstant, 
-					SeedParameterConstant, 
-					IndexParameterConstant + 1, 
-					ParameterType, 
-					RandomNumberParameterConstants..., 
-					next
-				>();
-		}
-		else
-			return std::array{RandomNumberParameterConstants...};
-	}
-
-	template<
-			std::integral auto MimimumParameterConstant, 
-			std::integral auto MaximumParameterConstant, 
-			std::integral auto LengthParameterConstant, 
-			std::integral auto SeedParameterConstant = hashTime()
-		>
-	consteval static auto randomRange()
-	{
-		using IntegralType = decltype(MimimumParameterConstant);
-		return randomRange<
-				MimimumParameterConstant, 
-				MaximumParameterConstant, 
-				LengthParameterConstant, 
-				SeedParameterConstant, 
-				0, 
-				IntegralType
-			>();
-	}
-}
+//import :Templates;
+//
+//import <crand/distributions/uniform_int_distribution.hpp>;
+//import <crand/distributions/distribution_limits.hpp>;
+//import <crand/engines/xorshift_engine.hpp>;
+//import <crc_cpp.h>;
+//
+//export namespace Warp::Utilities
+//{
+//
+//	template<size_t... IndexParameterConstants>
+//	constexpr static size_t hashTimeImplementation(
+//			std::index_sequence<IndexParameterConstants...>
+//		)
+//	{
+//		crc_cpp::crc16_ccit crc;
+//		(crc.update(static_cast<uint8_t>(__TIME__[IndexParameterConstants])), ...);
+//		return crc.final();
+//	}
+//
+//	constexpr static const size_t standardTimeStringLength = 9;
+//
+//	constexpr static size_t hashTime()
+//	{
+//		return hashTimeImplementation(
+//				std::make_index_sequence<standardTimeStringLength>()
+//			);
+//	}
+//	template<
+//			std::integral auto MimimumParameterConstant, 
+//			std::integral auto MaximumParameterConstant
+//		>
+//	constexpr static auto randomNumber(std::integral auto seed = hashTime())
+//	{
+//		using IntegralType = decltype(MimimumParameterConstant);
+//		crand::xorshift64 generator(seed);
+//		return crand::uniform_int_distribution(
+//				crand::inclusive<IntegralType>(MimimumParameterConstant), 
+//				crand::inclusive<IntegralType>(MaximumParameterConstant) // There may be a compiler error if the types mismatch
+//			)(generator);
+//	}
+//
+//	template<
+//			std::integral auto MimimumParameterConstant, 
+//			std::integral auto MaximumParameterConstant, 
+//			std::integral auto LengthParameterConstant, 
+//			std::integral auto SeedParameterConstant, 
+//			std::integral auto IndexParameterConstant, 
+//			typename ParameterType, 
+//			std::integral auto... RandomNumberParameterConstants
+//		>
+//	consteval static auto randomRange()
+//	{
+//		using IntegralType = decltype(MimimumParameterConstant);
+//		if constexpr(IndexParameterConstant < LengthParameterConstant)
+//		{
+//			constexpr auto next = randomNumber<
+//					MimimumParameterConstant, 
+//					MaximumParameterConstant
+//				>(SeedParameterConstant);
+//			return randomRange<
+//					MimimumParameterConstant, 
+//					MaximumParameterConstant, 
+//					LengthParameterConstant, 
+//					SeedParameterConstant, 
+//					IndexParameterConstant + 1, 
+//					ParameterType, 
+//					RandomNumberParameterConstants..., 
+//					next
+//				>();
+//		}
+//		else
+//			return std::array{RandomNumberParameterConstants...};
+//	}
+//
+//	template<
+//			std::integral auto MimimumParameterConstant, 
+//			std::integral auto MaximumParameterConstant, 
+//			std::integral auto LengthParameterConstant, 
+//			std::integral auto SeedParameterConstant = hashTime()
+//		>
+//	consteval static auto randomRange()
+//	{
+//		using IntegralType = decltype(MimimumParameterConstant);
+//		return randomRange<
+//				MimimumParameterConstant, 
+//				MaximumParameterConstant, 
+//				LengthParameterConstant, 
+//				SeedParameterConstant, 
+//				0, 
+//				IntegralType
+//			>();
+//	}
+//}
 
