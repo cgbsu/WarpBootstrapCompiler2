@@ -1,6 +1,6 @@
 export module Warp.Utilities:CompileTimeTreeSort;
 
-import :ConstantBinaryTree;
+export import :ConstantBinaryTree;
 
 export namespace Warp::Utilities
 {

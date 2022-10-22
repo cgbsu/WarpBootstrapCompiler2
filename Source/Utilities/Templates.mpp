@@ -1,6 +1,6 @@
 export module Warp.Utilities:Templates;
 
-import Warp.Common;
+export import Warp.Common;
 
 export namespace Warp::Utilities
 {
