@@ -75,5 +75,7 @@ export namespace Warp::Utilities
 			return std::string_view{string};
 		}
 	};
+
+	void hi2() { std::cout << "Hi\n"; }
 }
 

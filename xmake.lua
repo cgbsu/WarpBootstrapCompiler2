@@ -28,7 +28,7 @@ target("test")
 	set_kind("binary")
 	add_mflags("-freport-bug", "-E")
 	add_files(
-			--"Source/Utilities/*.mpp", 
+			"Source/Utilities/*.mpp", 
 			"Source/*.mpp", 
 			--"Source/Common.mpp", 
 			"Test/*.cpp"

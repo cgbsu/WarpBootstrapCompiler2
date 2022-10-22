@@ -75,6 +75,14 @@ namespace Warp::Utilities
 			return std::string_view{string};
 		}
 	};
+static void hi() { std::cout << "Hello\n"; }
+//asdfdsafsaddf
+//sdaf
+//asddf
+//sadf
+//sadf
+//dsaf
+//sd
 }
 #endif // WARP__BOOTSTRAP__COMPILER__UTILITIES__INCLUDE__GUARD__STRINGS__HPP
 
