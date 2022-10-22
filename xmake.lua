@@ -1,7 +1,7 @@
 set_languages("c++23")
 
-add_requires("conan::ctpg/1.3.7", {alias = "ctpg"})
-add_requires("conan::crc_cpp/1.1.0", {alias = "crc_cpp"})
+-- add_requires("conan::ctpg/1.3.7", {alias = "ctpg"})
+-- add_requires("conan::crc_cpp/1.1.0", {alias = "crc_cpp"})
 add_requires("conan::catch2/3.0.1", {alias = "catch2"})
 
 --target("Warp.Common")
@@ -20,6 +20,10 @@ add_requires("conan::catch2/3.0.1", {alias = "catch2"})
 --	set_policy("build.c++.modules", true)
 --target_end()
 
+-- Check this out later! https://xmake.io/#/features/unity_build
+-- add_rules("c.unity_build")
+-- add_rules("c++.unity_build")
+
 target("test")
 	set_kind("binary")
 	add_files(
@@ -31,6 +35,7 @@ target("test")
 	--add_deps("Warp.Common");
 	add_includedirs("Include")
 	add_includedirs("Include/ThirdParty/constexpr-random/include")
+	add_includedirs("Include/ThirdParty/ctpg/include")
 	set_policy("build.c++.modules", true)
 target_end()
 
