@@ -29,7 +29,7 @@ export import <concepts>;
 
 // </iso-standard> //
 
-export import <ctpg/ctpg.hpp>;
+//export import <ctpg/ctpg.hpp>;
 
 // </third-party> //
 
