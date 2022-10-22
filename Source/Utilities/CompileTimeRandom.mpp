@@ -1,32 +1,32 @@
-module;
-#include <Warp/Common.hpp>
-#include <crc_cpp.h>
-#include <crand/distributions/uniform_int_distribution.hpp>
-#include <crand/distributions/distribution_limits.hpp>
-#include <crand/engines/xorshift_engine.hpp>
 export module Warp.Utilities:CompileTimeRandom;
+
+//export import <crc_cpp.h>;
+import Warp.Common;
+import <crand/distributions/uniform_int_distribution.hpp>;
+import <crand/distributions/distribution_limits.hpp>;
+import <crand/engines/xorshift_engine.hpp>;
 
 export namespace Warp::Utilities
 {
 
-	template<size_t... IndexParameterConstants>
-	constexpr static size_t hashTimeImplementation(
-			std::index_sequence<IndexParameterConstants...>
-		)
-	{
-		crc_cpp::crc16_ccit crc;
-		(crc.update(static_cast<uint8_t>(__TIME__[IndexParameterConstants])), ...);
-		return crc.final();
-	}
+	//template<size_t... IndexParameterConstants>
+	//constexpr static size_t hashTimeImplementation(
+	//		std::index_sequence<IndexParameterConstants...>
+	//	)
+	//{
+	//	crc_cpp::crc16_ccit crc;
+	//	(crc.update(static_cast<uint8_t>(__TIME__[IndexParameterConstants])), ...);
+	//	return crc.final();
+	//}
 
-	constexpr static const size_t standardTimeStringLength = 9;
+	//constexpr static const size_t standardTimeStringLength = 9;
 
-	constexpr static size_t hashTime()
-	{
-		return hashTimeImplementation(
-				std::make_index_sequence<standardTimeStringLength>()
-			);
-	}
+	//constexpr static size_t hashTime()
+	//{
+	//	return hashTimeImplementation(
+	//			std::make_index_sequence<standardTimeStringLength>()
+	//		);
+	//}
 
 	template<
 			std::integral auto MimimumParameterConstant, 

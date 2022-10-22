@@ -1,10 +1,6 @@
-module;
-	#include <Warp/Common.hpp>
 export module Warp.Utilities:CompileTimeTreeSort;
 
-//import Warp.Utilities:Templates;
-//import Warp.Utilities:Sequence;
-export import :ConstantBinaryTree;
+import :ConstantBinaryTree;
 
 export namespace Warp::Utilities
 {

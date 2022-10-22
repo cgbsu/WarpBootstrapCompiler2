@@ -1,6 +1,6 @@
-module;
-	#include <Warp/Common.hpp>
 export module Warp.Utilities:Templates;
+
+export import Warp.Common;
 
 export namespace Warp::Utilities
 {
