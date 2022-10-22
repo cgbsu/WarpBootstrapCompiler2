@@ -22,9 +22,14 @@ add_requires("conan::catch2/3.0.1", {alias = "catch2"})
 
 target("test")
 	set_kind("binary")
-	add_files("Source/Utilities/*.mpp", "Source/*.mpp", "Test/*.cpp")
+	add_files(
+	--"Source/Utilities/*.mpp", 
+	"Source/*.mpp", 
+	--"Source/Common.mpp", 
+	"Test/*.cpp")
 	add_packages("ctpg", "catch2", "crc_cpp")
 	--add_deps("Warp.Common");
+	add_includedirs("Include")
 	add_includedirs("Include/ThirdParty/constexpr-random/include")
 	set_policy("build.c++.modules", true)
 target_end()

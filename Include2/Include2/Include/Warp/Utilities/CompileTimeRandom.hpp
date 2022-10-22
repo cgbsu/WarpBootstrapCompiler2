@@ -1,15 +1,10 @@
-module;
-
+#include <Warp/Common.hpp>
 #include <crc_cpp.h>
 #include <crand/distributions/uniform_int_distribution.hpp>
 #include <crand/distributions/distribution_limits.hpp>
 #include <crand/engines/xorshift_engine.hpp>
 
-export module Warp.Utilities:CompileTimeRandom;
-
-import :Strings;
-
-export namespace Warp::Utilities
+namespace Warp::Utilities
 {
 
 	template<size_t... IndexParameterConstants>

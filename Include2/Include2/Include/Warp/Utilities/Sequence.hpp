@@ -1,6 +1,8 @@
-export module Warp.Utilities:Sequence;
+module;
+	#include <Warp/Common.hpp>
+module Warp.Utilities:Sequence;
 
-import :Templates;
+export import Warp.Utilities:Templates;
 
 export namespace Warp::Utilities
 {

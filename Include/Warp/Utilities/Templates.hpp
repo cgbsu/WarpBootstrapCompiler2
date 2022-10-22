@@ -1,0 +1,128 @@
+#ifndef WARP__BOOTSTRAP__COMPILER__UTILITIES__INCLUDE__GUARD__TEMPLATES__HPP
+#define WARP__BOOTSTRAP__COMPILER__UTILITIES__INCLUDE__GUARD__TEMPLATES__HPP
+#include <Warp/Common.hpp>
+
+namespace Warp::Utilities
+{
+	template<typename ToCleanParameterType>
+	using CleanType = std::remove_reference_t<std::decay_t<ToCleanParameterType>>;
+
+	template<typename CanidateParameterType>
+	constinit static const auto isNullOptType = std::is_same_v<CleanType<CanidateParameterType>, std::nullopt_t>;
+	
+	template<auto CanidateParameterConstant>
+	constinit static const auto constantIsNullOptType 
+			= std::is_same_v<CleanType<decltype(CanidateParameterConstant)>, std::nullopt_t>;
+	
+	template<typename CanidateParameterType>
+	concept NotNullOptConcept = isNullOptType<CanidateParameterType> == false;
+	
+	template<typename CanidateParameterType>
+	concept NullOptConcept = isNullOptType<CanidateParameterType> == true;
+
+	struct PlaceHolder {};
+
+	/* Useful for when you need an instance of something,    * 
+	 * say for a constexpr/consteval function, but dont want * 
+	 * to instantiate it (its just for retrieving the type)  */
+	template<typename ParameterType>
+	struct TypeHolder {
+		using Type = ParameterType;
+	};
+
+	template<typename DoNotConvertToParameterType, typename ConvertToParameterType, typename CanidateParameterType>
+	concept ConvertableToExceptConcept =
+			(!std::convertible_to<CleanType<DoNotConvertToParameterType>, CleanType<CanidateParameterType>> 
+					&& std::convertible_to<CleanType<ConvertToParameterType>, CleanType<CanidateParameterType>>)
+			|| (!std::same_as<CleanType<DoNotConvertToParameterType>, CleanType<CanidateParameterType>> 
+					&& std::convertible_to<CleanType<ConvertToParameterType>, CleanType<CanidateParameterType>>);
+
+	template<typename, typename>
+	struct TotallyOrderedWith {
+		constexpr static const bool value = false;
+	};
+
+	template<typename LeftParameterType, typename RightParameterType>
+	requires std::totally_ordered_with<LeftParameterType, RightParameterType>
+	struct TotallyOrderedWith<LeftParameterType, RightParameterType> {
+		constexpr static const bool value = true;
+	};
+
+	template<typename, typename>
+	struct EquallyComparibleWith {
+		constexpr static const bool value = false;
+	};
+
+	template<typename LeftParameterType, typename RightParameterType>
+	requires std::equality_comparable_with<LeftParameterType, RightParameterType>
+	struct EquallyComparibleWith<LeftParameterType, RightParameterType> {
+		constexpr static const bool value = true;
+	};
+
+	template<typename LeftParameterType, typename RightParameterType>
+	constexpr static const bool isComparible
+			= TotallyOrderedWith<LeftParameterType, RightParameterType>::value;
+
+	template<typename LeftParameterType, typename RightParameterType>
+	constexpr static const bool isEquallyComparible 
+			= EquallyComparibleWith<LeftParameterType, RightParameterType>::value;
+
+	template<typename CanidateParameterType>
+	concept HasTypeConcept = requires(CanidateParameterType) { typename CanidateParameterType::Type; };
+
+	template<typename ParserParameterType>
+	concept ParserConcept = requires(ParserParameterType) {
+			ParserParameterType::rules();
+			ParserParameterType::terms;
+			ParserParameterType::non_terminal_terms;
+		};
+
+	template<size_t ToIgnoreParmeterConstant, size_t... IndexParameterConstants>
+	constexpr static const auto takeAfterImplentation(auto from, std::index_sequence<IndexParameterConstants...>) {
+		return std::tuple{std::get<IndexParameterConstants + ToIgnoreParmeterConstant>(from)...};
+	}
+
+	template<size_t ToIgnoreParmeterConstant>
+	constexpr static const auto takeAfter(auto from) {
+		return takeImplentation(from, (std::tuple_size_v<decltype(from)> - ToIgnoreParmeterConstant));
+	}
+
+	template<typename TupleParameterType, size_t ToIgnoreParmeterConstant>
+	using TupleAfterType = decltype(takeAfter<ToIgnoreParmeterConstant>(std::declval<TupleParameterType>()));
+
+	template<typename TupleParameterType>
+	using TupleAfterFirstType = TupleAfterType<TupleParameterType, 1>;
+
+	constexpr const auto concatinateTuples(auto currentTuple, auto lastTuple) {
+		return std::tuple_cat(currentTuple, lastTuple);
+	}
+
+	constexpr const auto concatinateTuples(auto currentTuple, auto... tuples)
+			requires(sizeof...(tuples) > 0) {
+		return std::tuple_cat(currentTuple, concatinateTuples(tuples...));
+	}
+	// Shameless yoink from cppreference.com/reference/en/cpp/utility/variant/visit.html
+	template<class... Ts> struct OverloadedVisit : Ts... { using Ts::operator()...; };
+	template<class... Ts> OverloadedVisit(Ts...) -> OverloadedVisit<Ts...>;
+
+	template<typename ParameterType>
+	struct IsOptionalHelper {
+		constexpr static const bool value = false;
+		constexpr IsOptionalHelper(ParameterType) {}
+	};
+	
+	template<typename ParameterType>
+	struct IsOptionalHelper<std::optional<ParameterType>> {
+		constexpr static const bool value = true;
+		constexpr IsOptionalHelper(std::optional<ParameterType>) {}
+	};
+	
+	template<typename ParameterType>
+	constexpr static const auto isOptional = IsOptionalHelper<ParameterType>::value;
+	
+	template<typename ParameterType>
+	concept OptionalConcept = isOptional<ParameterType>;
+}
+
+#endif // WARP__BOOTSTRAP__COMPILER__UTILITIES__INCLUDE__GUARD__TEMPLATES__HPP
+

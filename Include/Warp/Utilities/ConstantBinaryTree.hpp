@@ -1,8 +1,10 @@
-export module Warp.Utilities:ConstantBinaryTree;
+#ifndef WARP__BOOTSTRAP__COMPILER__UTILITIES__INCLUDE__GUARD__CONSTANT_BINARY_TREE__HPP
+#define WARP__BOOTSTRAP__COMPILER__UTILITIES__INCLUDE__GUARD__CONSTANT_BINARY_TREE__HPP
 
-import :Sequence;
+#include <Warp/Common.hpp>
+#include <Warp/Utilities/Templates.hpp>
 
-export namespace Warp::Utilities
+namespace Warp::Utilities
 {
 	template<
 	        auto LeftParameterConstant, 
@@ -106,4 +108,6 @@ export namespace Warp::Utilities
 	        std::nullopt
 	    >;
 }
+
+#endif // WARP__BOOTSTRAP__COMPILER__UTILITIES__INCLUDE__GUARD__CONSTANT_BINARY_TREE__HPP
 

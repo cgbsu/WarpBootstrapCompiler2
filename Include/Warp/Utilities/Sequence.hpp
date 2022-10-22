@@ -1,0 +1,228 @@
+#ifndef WARP__BOOTSTRAP__COMPILER__UTILITIES__INCLUDE__GUARD__SEQUENCE__HPP
+#define WARP__BOOTSTRAP__COMPILER__UTILITIES__INCLUDE__GUARD__SEQUENCE__HPP
+
+#include <Warp/Common.hpp>
+#include <Warp/Utilities/Templates.hpp>
+
+namespace Warp::Utilities
+{
+	template<auto... SequenceParameterConstants>
+	struct RawSequence {};
+
+	template<auto... SequenceParameterConstants>
+	struct Sequence
+	{
+	    template<template<auto...> typename InjectIntoParameterTemplate> using InjectedType = InjectIntoParameterTemplate<SequenceParameterConstants...>;
+
+	    template<template<auto...> typename InjectIntoParameterTemplate>
+		constexpr static auto inject(auto... additionalArguments)
+		{
+			return InjectionFunctionParameterConstant<
+					SequenceParameterConstants...
+				>(additionalArguments...);
+		}
+	
+	    template<auto... NewSequenceParameterConstants>
+	    using MergeType = Sequence<
+	            SequenceParameterConstants..., 
+	            NewSequenceParameterConstants...
+	        >;
+	
+	    template<auto... NewSequenceParameterConstants>
+	    constexpr static const auto merge(Sequence<NewSequenceParameterConstants...>) {
+	        return Sequence<
+	                SequenceParameterConstants..., 
+	                NewSequenceParameterConstants...
+	            >();
+	    }
+	
+	    template<auto... NewSequenceParameterConstants>
+	    constexpr static const auto merged = Sequence<
+	            SequenceParameterConstants..., 
+	            NewSequenceParameterConstants...
+	        >();
+	
+	    template<auto... NewSequenceParameterConstants>
+	    constexpr static const auto prepended = Sequence<
+	            NewSequenceParameterConstants..., 
+	            SequenceParameterConstants... 
+	        >();
+
+	    static std::string toString()
+		{
+			std::stringstream stream;
+			const auto printElement = [&](const auto element) {
+				stream << element << ", ";
+			};
+			stream << "Sequence{";
+			(printElement(SequenceParameterConstants), ...);
+			stream << "}";
+			return stream.str();
+	    }
+
+		template<auto... PrecedingSequenceParameterConstants>
+		requires(sizeof...(PrecedingSequenceParameterConstants) == 0)
+		constexpr static const void findLastImplementation(RawSequence<PrecedingSequenceParameterConstants...>) {}
+
+		template<auto... ProcedingSequenceParameterConstants>
+		requires(sizeof...(ProcedingSequenceParameterConstants) == 0)
+		constexpr static const void findFirstImplementation(RawSequence<ProcedingSequenceParameterConstants...>) {}
+
+		template<
+				auto... PrecedingSequenceParameterConstants, 
+				auto LastParameterConstant
+			>
+		constexpr static const auto findLast(
+				RawSequence<PrecedingSequenceParameterConstants..., LastParameterConstant>) {
+			return LastParameterConstant;
+		}
+
+		template<
+				auto... ProcedingSequenceParameterConstants, 
+				auto FirstParameterConstant
+			>
+		constexpr static const auto findFirst(
+				RawSequence<FirstParameterConstant, ProcedingSequenceParameterConstants...>) {
+			return FirstParameterConstant;
+		}
+
+		constexpr static const auto last() {
+				return findLast(RawSequence<SequenceParameterConstants...>());
+		}
+
+		constexpr static const auto first() {
+				return findFirst(RawSequence<SequenceParameterConstants...>());
+		}
+	};
+	
+	template<size_t FirstParameterConstant, size_t... SequenceParmaterConstants>
+	struct SequenceTakeOneHelper
+	{
+	    constinit static const size_t first = FirstParameterConstant;
+	    constexpr static const auto nextSequence 
+				= std::index_sequence<SequenceParmaterConstants...>{};
+	    consteval SequenceTakeOneHelper() noexcept {}
+	    consteval SequenceTakeOneHelper(std::index_sequence<
+				FirstParameterConstant, 
+				SequenceParmaterConstants...
+			>) noexcept {}
+	};
+
+	template<
+			size_t IndexParameterConstant, 
+			size_t CurrentIndexParameterConstant, 
+			auto CurrentElementParameterConstant, 
+			auto... ElementParameterConstants
+		>
+	requires(std::is_same_v<
+			CleanType<decltype(CurrentElementParameterConstant)>, 
+			CleanType<decltype(ElementParameterConstants)>
+		> && ...)
+	consteval static const auto parameterConstantAtIndexImplementation() noexcept
+	{
+		const CleanType<decltype(CurrentElementParameterConstant)> elements[] = {
+			CurrentElementParameterConstant, ElementParameterConstants...
+		};
+		return elements[IndexParameterConstant];
+	}
+
+
+	template<
+			size_t IndexParameterConstant, 
+			size_t CurrentIndexParameterConstant, 
+			auto CurrentElementParameterConstant, 
+			auto... ElementParameterConstants
+		>
+	constexpr static const auto parameterConstantAtIndexImplementation() noexcept
+	{
+		if constexpr(IndexParameterConstant == CurrentIndexParameterConstant)
+			return CurrentElementParameterConstant;
+		else
+		{
+			static_assert(
+					sizeof...(ElementParameterConstants) == 0, 
+					"Heterogenous:parameterConstantAtIndexImplementation: Element not found!!"
+				);
+			return parameterConstantAtIndexImplementation<
+					IndexParameterConstant, 
+					CurrentIndexParameterConstant + 1, 
+					ElementParameterConstants...
+				>();
+		}
+	}
+
+	/* TODO: Could be specialized so if all the constants in ElementParameterConstants are of the *
+	* same type, an array could be constructed then the desired element simly indexed. ***********/ 
+	template<
+			size_t IndexParameterConstant, 
+			auto... ElementParameterConstants, 
+			template<auto...> typename SequenceParamaeterType
+		>
+	requires(IndexParameterConstant < sizeof...(ElementParameterConstants))
+	consteval static const auto parameterConstantAtIndex(
+			SequenceParamaeterType<ElementParameterConstants...>
+		) noexcept
+	{
+		return parameterConstantAtIndexImplementation<
+				IndexParameterConstant, 
+				0, 
+				ElementParameterConstants...
+			>();
+	}
+
+	template<
+			size_t ElementToFilterOutIndexParameterConstant, 
+			size_t CurrentIndexParameterConstant, 
+			auto ReplacementParameterConstant, 
+			auto CurrentElementParameterConstant, 
+			auto... ElementParameterConstants, 
+			auto... PreviousElementsParameterConstants
+		>
+	constexpr static auto replaceElement(
+			Sequence<CurrentElementParameterConstant, ElementParameterConstants...>, 
+			Sequence<ElementParameterConstants...>
+		)
+	{
+		if constexpr(CurrentIndexParameterConstant == ElementToFilterOutIndexParameterConstant)
+		{
+			return std::pair(
+					Sequence<
+							PreviousElementsParameterConstants..., 
+							ReplacementParameterConstant, 
+							ElementParameterConstants...
+						>(), 
+					CurrentElementParameterConstant
+				);
+		}
+		else
+		{
+			return filterOutElement<
+					ElementToFilterOutIndexParameterConstant, 
+					CurrentIndexParameterConstant + 1, 
+					ReplacementParameterConstant
+				>(
+						Sequence<ElementParameterConstants...>(), 
+						Sequence<PreviousElementsParameterConstants..., CurrentElementParameterConstant>()
+				);
+		}
+	}
+
+	template<
+			size_t ElementToFilterOutIndexParameterConstant, 
+			auto ReplacementParameterConstant, 
+			template <auto...> typename SequenceParameterTemplate, 
+			auto... ElementParameterConstants
+		>
+	constexpr static auto replaceElement(SequenceParameterTemplate<ElementParameterConstants...>)
+	{
+		return replaceElement<
+				ElementToFilterOutIndexParameterConstant, 
+				0, 
+				ReplacementParameterConstant
+			>(Sequence<ElementParameterConstants...>{}, Sequence<>());
+	}
+
+}
+
+#endif // WARP__BOOTSTRAP__COMPILER__UTILITIES__INCLUDE__GUARD__SEQUENCE__HPP
+

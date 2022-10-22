@@ -1,8 +1,8 @@
-export module Warp.Utilities:Strings;
+#include <Warp/Common.hpp>
 
-import :CompileTimeTreeSort;
-
-export namespace Warp::Utilities
+#ifndef WARP__BOOTSTRAP__COMPILER__UTILITIES__INCLUDE__GUARD__STRINGS__HPP
+#define WARP__BOOTSTRAP__COMPILER__UTILITIES__INCLUDE__GUARD__STRINGS__HPP
+namespace Warp::Utilities
 {
 	template<const auto& StringParameterConstant, size_t IndexParameterConstant = 0>
 	consteval size_t stringLength()
@@ -76,4 +76,5 @@ export namespace Warp::Utilities
 		}
 	};
 }
+#endif // WARP__BOOTSTRAP__COMPILER__UTILITIES__INCLUDE__GUARD__STRINGS__HPP
 

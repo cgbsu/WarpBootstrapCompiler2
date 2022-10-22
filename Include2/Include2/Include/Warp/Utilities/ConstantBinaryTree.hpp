@@ -1,0 +1,111 @@
+module;
+	#include <Warp/Common.hpp>
+module Warp.Utilities:ConstantBinaryTree;
+
+export import Warp.Utilities:Sequence;
+
+export namespace Warp::Utilities
+{
+	template<
+	        auto LeftParameterConstant, 
+	        auto RootParameterConstant, 
+	        auto RightParameterConstant
+	    >
+	struct ConstantBinaryTree
+	{
+	    constexpr static const auto left = LeftParameterConstant;
+	    constexpr static const auto root = RootParameterConstant;
+	    constexpr static const auto right = RightParameterConstant;
+	
+	    using LeftType = decltype(left);
+	    using RootType = decltype(root);
+	    using RightType = decltype(right);
+	
+	    constinit static const bool leftIsNullOpt = isNullOptType<LeftType>;
+	    constinit static const bool rootIsNullOpt = isNullOptType<RootType>;
+	    constinit static const bool rightIsNullOpt = isNullOptType<RightType>;
+	
+	    template<auto NewRootParameterConstant>
+	    using NewRootType = ConstantBinaryTree<left, NewRootParameterConstant, right>;
+	
+	    template<auto NewRootParameterConstant>
+	    constexpr static const auto newRoot = NewRootType<NewRootParameterConstant>();
+	
+	    template<auto NewLeftParameterConstant>
+	    using NewLeftType = ConstantBinaryTree<NewLeftParameterConstant, root, right>;
+	
+	    template<auto NewLeftParameterConstant>
+	    constexpr static const auto newLeft = NewLeftType<NewLeftParameterConstant>();
+	    
+	    template<auto NewRightParameterConstant>
+	    using NewRightType = ConstantBinaryTree<left, root, NewRightParameterConstant>;
+	
+	    template<auto NewRightParameterConstant>
+	    constexpr static const auto newRight = NewRightType<NewRightParameterConstant>();
+	
+	    //template<auto... CurrentSequenceParameterConstants>
+	    constexpr static const auto flatten()
+	    {
+	        if constexpr(rootIsNullOpt == false)
+	        {
+	            constexpr bool isLeaf = (leftIsNullOpt ==  true) && (rightIsNullOpt == true);
+	            if constexpr(isLeaf == true)
+	                return Sequence<root>();
+	            else
+	            {
+	                if constexpr(leftIsNullOpt == false)
+	                {
+	                    using LeftResultType = decltype(LeftType::flatten());
+	                    if constexpr(rightIsNullOpt == false)
+	                    {
+	                        constexpr const auto rightResult = RightType::flatten();
+							constexpr const auto leftMerged = LeftResultType::template merged<root>;
+	                        return decltype(leftMerged)::template merge(rightResult);
+	                    }
+	                    else
+	                        return LeftResultType::template merged<root>;
+	                }
+	                else
+	                    return Sequence<root>::template merge(RightType::flatten());
+	            }
+	        }
+	        else
+				return Sequence<>();
+	    }
+	    static std::string componentToString(const auto component)
+	    {
+	        if constexpr(constantIsNullOptType<component> == true)
+	            return "nullopt";
+	        else
+	            return decltype(component)::toString();
+	    } 
+	
+	    static std::string rootToString()
+	    {
+	        if constexpr(rootIsNullOpt == true)
+	            return "nullopt";
+	        else {
+	            std::stringstream s;
+	            s << root;
+	            return s.str();
+	        }
+	    }
+	
+	    static std::string toString()
+	    {
+	        std::stringstream s;
+	        s << "Node:" << rootToString() << ":{" 
+	                << componentToString(left) 
+	                << ", " << componentToString(right) 
+	            << "}";
+	        return s.str();
+	    }
+	};
+	
+	using ConstantBinaryTreeRootType = ConstantBinaryTree<
+	        std::nullopt, 
+	        std::nullopt, 
+	        std::nullopt
+	    >;
+}
+
