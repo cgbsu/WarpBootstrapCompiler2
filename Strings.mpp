@@ -1,6 +1,6 @@
 export module Warp.Utilities:Strings;
 
-import Warp.Common;
+import Warp.Utilities:CompileTimeTreeSort;
 
 export namespace Warp::Utilities
 {

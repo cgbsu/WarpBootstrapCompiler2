@@ -15,7 +15,7 @@ export import <array>;
 
 // Theory/Algorithmic/Functional //
 export import <algorithm>;
-export import <functional>;
+//export import <functional>;
 
 // Utility //
 export import <utility>;
@@ -30,7 +30,7 @@ export import <concepts>;
 // </iso-standard> //
 
 // Parsing //
-export import <ctpg/ctpg.hpp>;
+//export import <ctpg/ctpg.hpp>;
 
 // </third-party> //
 

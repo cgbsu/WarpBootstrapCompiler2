@@ -1,8 +1,8 @@
 export module Warp.Utilities;
-export import :CompileTimeRandom;
-//export import :CompileTimeTreeSort;
-//export import :ConstantBinaryTree;
-//export import :Sequence;
+export import :Templates;
+export import :Sequence;
+export import :ConstantBinaryTree;
+export import :CompileTimeTreeSort;
 //export import :Strings;
-//export import :Templates;
+//export import :CompileTimeRandom;
 
