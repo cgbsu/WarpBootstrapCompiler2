@@ -76,6 +76,6 @@ export namespace Warp::Utilities
 		}
 	};
 
-	void hi2() { std::cout << "Hi\n"; }
+	//void hi2() { std::cout << "Hi\n"; }
 }
 

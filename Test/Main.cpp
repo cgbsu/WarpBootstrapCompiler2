@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
 		);
 	std::cout << decltype(result)::toString() << "\n";
 	constexpr std::array expected{1u, 2u, 3u, 5u, 6u, 10u, 14u, 16u, 17u, 18u, 30u, 82u};
-	hi2();
+	hi();
 	return 0;
 }
 
