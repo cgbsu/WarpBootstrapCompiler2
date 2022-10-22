@@ -1,0 +1,9 @@
+[submodule "Include/ThirdParty/ctpg"]
+	path = Include/ThirdParty/ctpg
+	url = https://github.com/peter-winter/ctpg.git/
+[submodule "Include/ThirdParty/constexpr-random"]
+	path = Include/ThirdParty/constexpr-random
+	url = https://github.com/jan-moeller/constexpr-random.git
+[submodule "Include/ThirdParty/Sprout"]
+	path = Include/ThirdParty/Sprout
+	url = https://github.com/bolero-MURAKAMI/Sprout.git
