@@ -23,7 +23,7 @@ add_requires("conan::catch2/3.0.1", {alias = "catch2"})
 target("test")
 	set_kind("binary")
 	add_files(
-	--"Source/Utilities/*.mpp", 
+	"Source/Utilities/*.mpp", 
 	"Source/*.mpp", 
 	--"Source/Common.mpp", 
 	"Test/*.cpp")
