@@ -3,6 +3,6 @@ export import :Templates;
 export import :Sequence;
 export import :ConstantBinaryTree;
 export import :CompileTimeTreeSort;
-//export import :Strings;
-//export import :CompileTimeRandom;
+export import :Strings;
+export import :CompileTimeRandom;
 
