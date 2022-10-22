@@ -1,6 +1,6 @@
 export module Warp.Utilities:ConstantBinaryTree;
 
-export import :Sequence;
+import :Sequence;
 
 export namespace Warp::Utilities
 {
