@@ -1,7 +1,7 @@
 export module Warp.Utilities:CompileTimeRandom;
 
-//export import <crc_cpp.h>;
 import Warp.Common;
+import <crc_cpp.h>;
 import <crand/distributions/uniform_int_distribution.hpp>;
 import <crand/distributions/distribution_limits.hpp>;
 import <crand/engines/xorshift_engine.hpp>;
